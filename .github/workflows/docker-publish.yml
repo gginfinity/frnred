@@ -30,6 +30,13 @@ jobs:
         with:
           repository: GoodGameInfinity/frnred
 
+      # Rename .containerignore to .dockerignore
+      - name: Rename .containerignore to .dockerignore
+        run: |
+          if [ -f .containerignore ]; then
+            mv .containerignore .dockerignore
+          fi
+
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
       - name: Install cosign
@@ -69,6 +76,7 @@ jobs:
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
           context: .
+          file: ./Containerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
